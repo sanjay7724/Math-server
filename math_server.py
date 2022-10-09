@@ -30,6 +30,7 @@ class MathServerThread(Thread):
             proc = Popen(['bc'],stdin=PIPE,stderr=STDOUT,stdout=PIPE)
             out_thread = ProcessOutputThread(proc,self.conn,self.addr)
             out_thread.start()
+            self.conn.sendall("MATH SERVER DEVELOPED FOR FUN...\n ENTER ANY EXPRESSION...\n".encode())
             while proc.poll() is None:
                     query = self.conn.recv(BUFFER_SIZE)
                     #query = input("Enter expression -> ") +'\n'
@@ -64,9 +65,9 @@ s.listen()
 
 while True:
     conn,addr = s.accept()
-    if addr[0] in conn:#To avoid denial of service attack a client can have only one connection
-        print("Client {} rejected for misusing server ".format(addr[0]))
-        conn.close()
+    #if addr[0] in conn:#To avoid denial of service attack a client can have only one connection
+        #print("Client {} rejected for misusing server ".format(addr[0]))
+        #conn.close()
     print("Client {} connected with {}".format(addr[0],addr[1]))
     t = MathServerThread(conn,addr)
     t.start()
